@@ -1,0 +1,21 @@
+{
+  "name": "supplychain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.9.0"
+  },
+  "scripts": {
+    "eslint": "eslint migrations/**/*.js test/**/*.js client/**/*.js",
+    "solium": "solium -d contracts",
+    "lint": "npm run eslint && npm run solium"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "solium": "^1.2.4"
+  }
+}
