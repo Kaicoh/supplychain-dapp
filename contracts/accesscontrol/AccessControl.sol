@@ -13,4 +13,40 @@ contract AccessControl is ConsumerRole, DistributorRole, FarmerRole, RetailerRol
         RetailerRole()
         public
     {} // solium-disable-line no-empty-blocks
+
+    function renounceAccessControls() public {
+        if (isFarmer(msg.sender)) {
+            renounceFarmer();
+        }
+
+        if (isDistributor(msg.sender)) {
+            renounceDistributor();
+        }
+
+        if (isRetailer(msg.sender)) {
+            renounceRetailer();
+        }
+
+        if (isConsumer(msg.sender)) {
+            renounceConsumer();
+        }
+    }
+
+    function addAccessControls(address account) public {
+        if (!isFarmer(account)) {
+            addFarmer(account);
+        }
+
+        if (!isDistributor(account)) {
+            addDistributor(account);
+        }
+
+        if (!isRetailer(account)) {
+            addRetailer(account);
+        }
+
+        if (!isConsumer(account)) {
+            addConsumer(account);
+        }
+    }
 }

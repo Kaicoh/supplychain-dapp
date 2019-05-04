@@ -3,7 +3,6 @@ pragma solidity ^0.5.0;
 import "../accesscontrol/AccessControl.sol";
 
 contract SupplyChain is AccessControl {
-    address owner;
     uint public sku;
     mapping (uint => Item) items;
 
@@ -75,14 +74,7 @@ contract SupplyChain is AccessControl {
     }
 
     constructor() AccessControl() public payable {
-        owner = msg.sender;
         sku = 0;
-    }
-
-    function kill() public {
-        if (msg.sender == owner) {
-            selfdestruct(_make_payable(owner));
-        }
     }
 
     function cultivateItem(string memory _name, uint _price)
