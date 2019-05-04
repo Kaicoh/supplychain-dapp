@@ -92,6 +92,22 @@ contract('SupplyChain', (accounts) => {
             );
         });
 
+        it('sends weis to farmer as much as wholesale price', async () => {
+            const balanceBefore = await web3.eth.getBalance(farmer);
+
+            await instance.buyItem(sku, {
+                from: distributor,
+                value: wholesalePrice,
+            });
+
+            const balanceAfter = await web3.eth.getBalance(farmer);
+
+            assert.equal(
+                Number(balanceAfter),
+                Number(balanceBefore) + Number(wholesalePrice),
+            );
+        });
+
         it('reverts when requested by not distributor', async () => {
             try {
                 await instance.buyItem(sku, {
@@ -269,6 +285,19 @@ contract('SupplyChain', (accounts) => {
             assert.equal(
                 Number(balanceBefore) - Number(balanceAfter),
                 Number(retailPrice),
+            );
+        });
+
+        it('sends weis to distributor as much as retail price', async () => {
+            const balanceBefore = await web3.eth.getBalance(distributor);
+
+            await instance.purchaseItem(sku, { from: consumer, value: retailPrice });
+
+            const balanceAfter = await web3.eth.getBalance(distributor);
+
+            assert.equal(
+                Number(balanceAfter),
+                Number(balanceBefore) + Number(retailPrice),
             );
         });
 
