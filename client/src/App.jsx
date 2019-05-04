@@ -1,26 +1,82 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import * as web3Adopter from './utils/web3Adopter';
+import SimpleStorageContract from './contracts/SimpleStorage.json';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const [web3, setWeb3] = useState(null);
+    const [account, setAccount] = useState(null);
+    const [contract, setContract] = useState(null);
+    const [storageValue, setStorageValue] = useState(0);
+
+    useEffect(() => {
+        web3Adopter.init().then(setWeb3);
+    }, []);
+
+    useEffect(() => {
+        if (web3) {
+            web3.eth.getAccounts().then(accounts => setAccount(accounts[0]));
+        }
+    }, [web3]);
+
+    useEffect(() => {
+        if (web3) {
+            web3.eth.net.getId().then((networkId) => {
+                const deployedNetwork = SimpleStorageContract.networks[networkId];
+                const instance = new web3.eth.Contract(
+                    SimpleStorageContract.abi,
+                    deployedNetwork && deployedNetwork.address,
+                );
+                setContract(instance);
+            });
+        }
+    }, [web3]);
+
+    useEffect(() => {
+        if (account && contract) {
+            const getStorageValue = () => {
+                contract.methods.get().call().then((response) => {
+                    setStorageValue(response.toNumber());
+                });
+            };
+
+            getStorageValue();
+
+            contract.methods.set(10).send({ from: account })
+                .on('transactionHash', (hash) => {
+                    console.log('transaction hash:', hash);
+                })
+                .on('confirmation', () => {
+                    getStorageValue();
+                })
+                .on('error', (error) => {
+                    console.log(error);
+                });
+        }
+    }, [account, contract]);
+
+    return web3 ? (
+        <div className="App">
+            <h1>Good to Go!</h1>
+            <p>Your Truffle Box is installed and ready.</p>
+            <h2>Smart Contract Example</h2>
+            <p>
+                If your contracts compiled and migrated successfully, below will show
+                a stored value of 5 (by default).
+            </p>
+            <p>
+                Try changing the value stored on
+                <strong> line 40 </strong>
+                of App.js.
+            </p>
+            <div>
+                The stored value is:
+                {storageValue}
+            </div>
+        </div>
+    ) : (
+        <div>Loading Web3, accounts, and contract...</div>
+    );
+};
 
 export default App;
