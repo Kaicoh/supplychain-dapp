@@ -42,7 +42,7 @@ const App = () => {
 
             getStorageValue();
 
-            contract.methods.set(10).send({ from: account })
+            contract.methods.set(15).send({ from: account })
                 .on('transactionHash', (hash) => {
                     console.log('transaction hash:', hash);
                 })
@@ -55,27 +55,31 @@ const App = () => {
         }
     }, [account, contract]);
 
-    return web3 ? (
-        <div className="App">
-            <h1>Good to Go!</h1>
-            <p>Your Truffle Box is installed and ready.</p>
-            <h2>Smart Contract Example</h2>
-            <p>
-                If your contracts compiled and migrated successfully, below will show
-                a stored value of 5 (by default).
-            </p>
-            <p>
-                Try changing the value stored on
-                <strong> line 40 </strong>
-                of App.js.
-            </p>
-            <div>
-                The stored value is:
-                {storageValue}
-            </div>
+    return (
+        <div className="row justify-content-md-center">
+            {web3 ? (
+                <div className="col-8">
+                    <h1>Good to Go!</h1>
+                    <p>Your Truffle Box is installed and ready.</p>
+                    <h2>Smart Contract Example</h2>
+                    <p>
+                        If your contracts compiled and migrated successfully, below will show
+                        a stored value of 5 (by default).
+                    </p>
+                    <p>
+                        Try changing the value stored on
+                        <strong> line 40 </strong>
+                        of App.js.
+                    </p>
+                    <div>
+                        The stored value is:
+                        {storageValue}
+                    </div>
+                </div>
+            ) : (
+                <p className="col-8">Loading Web3, accounts, and contract...</p>
+            )}
         </div>
-    ) : (
-        <div>Loading Web3, accounts, and contract...</div>
     );
 };
 
