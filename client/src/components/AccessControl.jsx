@@ -1,24 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Row } from 'reactstrap';
 import AddRole from './AddRole';
 import IsRole from './IsRole';
-
-const contractPropTypes = PropTypes.shape({
-    methods: PropTypes.shape({
-        // is Role?
-        isFarmer: PropTypes.func.isRequired,
-        isDistributor: PropTypes.func.isRequired,
-        isRetailer: PropTypes.func.isRequired,
-        isConsumer: PropTypes.func.isRequired,
-
-        // add Role
-        addFarmer: PropTypes.func.isRequired,
-        addDistributor: PropTypes.func.isRequired,
-        addRetailer: PropTypes.func.isRequired,
-        addConsumer: PropTypes.func.isRequired,
-    }).isRequired,
-});
+import contractProps from '../utils/contractProps';
 
 export const IsRoles = ({ contract }) => (
     <div className="shadow p-3 mb-3 bg-light rounded">
@@ -49,7 +33,7 @@ export const IsRoles = ({ contract }) => (
 );
 
 IsRoles.propTypes = {
-    contract: contractPropTypes.isRequired,
+    contract: contractProps.isRequired,
 };
 
 export const AddRoles = ({ contract }) => (
@@ -81,5 +65,5 @@ export const AddRoles = ({ contract }) => (
 );
 
 AddRoles.propTypes = {
-    contract: contractPropTypes.isRequired,
+    contract: contractProps.isRequired,
 };

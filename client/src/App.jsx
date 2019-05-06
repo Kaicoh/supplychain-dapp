@@ -3,6 +3,7 @@ import { Container, Spinner } from 'reactstrap';
 import useContract from './hooks/useContract';
 import Owner from './components/Owner';
 import { IsRoles, AddRoles } from './components/AccessControl';
+import Items from './components/Items';
 
 const App = () => {
     const [contract] = useContract();
@@ -15,6 +16,7 @@ const App = () => {
                     <Owner contract={contract} />
                     <IsRoles contract={contract} />
                     <AddRoles contract={contract} />
+                    <Items contract={contract} />
                 </Fragment>
             ) : (
                 <div className="row justify-content-center align-items-center">
