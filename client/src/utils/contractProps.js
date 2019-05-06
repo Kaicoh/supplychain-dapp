@@ -13,6 +13,8 @@ const contractProps = PropTypes.shape({
         addDistributor: PropTypes.func.isRequired,
         addRetailer: PropTypes.func.isRequired,
         addConsumer: PropTypes.func.isRequired,
+
+        fetchItem: PropTypes.func.isRequired,
     }).isRequired,
 });
 

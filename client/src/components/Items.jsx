@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row } from 'reactstrap';
 import FetchItem from './FetchItem';
+import ItemTabs from './ItemTabs';
 import contractProps from '../utils/contractProps';
 
 const Items = ({ contract }) => (
@@ -8,8 +9,12 @@ const Items = ({ contract }) => (
         <h4>Handling Items</h4>
         <Row>
             <FetchItem
+                fetchItem={contract.methods.fetchItem}
+                containerClass="col-5"
+            />
+            <ItemTabs
                 contract={contract}
-                containerClass="col-12"
+                containerClass="col-7"
             />
         </Row>
     </div>

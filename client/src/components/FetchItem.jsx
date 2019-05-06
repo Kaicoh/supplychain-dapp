@@ -7,7 +7,6 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import contractProps from '../utils/contractProps';
 
 const DisabledForm = ({ type, label, value }) => {
     const capitalizedlabel = `${label.charAt(0).toUpperCase()}${label.slice(1)}`;
@@ -36,7 +35,7 @@ DisabledForm.propTypes = {
     ]).isRequired,
 };
 
-const FetchItem = ({ contract, containerClass }) => {
+const FetchItem = ({ fetchItem, containerClass }) => {
     const [sku, setSku] = useState(0);
     const [name, setName] = useState('');
     const [itemState, setItemState] = useState('');
@@ -49,7 +48,7 @@ const FetchItem = ({ contract, containerClass }) => {
     const [retailPrice, setRetailePrice] = useState(0);
 
     const onSubmit = () => {
-        contract.methods.fetchItem(sku).call()
+        fetchItem(sku).call()
             .then((response) => {
                 setName(response[1]);
                 setItemState(response[2]);
@@ -107,7 +106,7 @@ FetchItem.defaultProps = {
 };
 
 FetchItem.propTypes = {
-    contract: contractProps.isRequired,
+    fetchItem: PropTypes.func.isRequired,
     containerClass: PropTypes.string,
 };
 
