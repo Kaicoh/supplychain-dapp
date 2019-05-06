@@ -14,6 +14,12 @@ const contractProps = PropTypes.shape({
         addRetailer: PropTypes.func.isRequired,
         addConsumer: PropTypes.func.isRequired,
 
+        cultivateItem: PropTypes.func.isRequired,
+        buyItem: PropTypes.func.isRequired,
+        shipItem: PropTypes.func.isRequired,
+        receiveItem: PropTypes.func.isRequired,
+        makeBouquet: PropTypes.func.isRequired,
+        purchaseItem: PropTypes.func.isRequired,
         fetchItem: PropTypes.func.isRequired,
     }).isRequired,
 });
