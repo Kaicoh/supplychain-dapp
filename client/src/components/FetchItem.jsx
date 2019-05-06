@@ -93,8 +93,10 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                 <Button
                     color="primary"
                     onClick={onSubmit}
+                    outline
+                    block
                 >
-                    submit
+                    call
                 </Button>
             </Form>
         </div>

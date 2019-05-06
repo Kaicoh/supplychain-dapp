@@ -25,7 +25,7 @@ const Owner = ({ contract }) => {
                 <p>{owner}</p>
             )}
             {!loading && (
-                <Button color="primary" onClick={getOwner}>
+                <Button outline block color="primary" onClick={getOwner}>
                     Reload
                 </Button>
             )}

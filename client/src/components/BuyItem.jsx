@@ -88,6 +88,7 @@ const BuyItem = ({ buyItem, containerClass }) => {
                 <Button
                     color="primary"
                     onClick={onSubmit}
+                    block
                 >
                     submit
                 </Button>

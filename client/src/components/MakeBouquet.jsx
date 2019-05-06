@@ -88,6 +88,7 @@ const MakeBouquet = ({ makeBouquet, containerClass }) => {
                 <Button
                     color="primary"
                     onClick={onSubmit}
+                    block
                 >
                     submit
                 </Button>

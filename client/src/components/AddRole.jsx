@@ -68,6 +68,7 @@ const AddRole = ({ containerClass, name, addRole }) => {
                 <Button
                     color="primary"
                     onClick={onSubmit}
+                    block
                 >
                     submit
                 </Button>
