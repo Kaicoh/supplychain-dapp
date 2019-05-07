@@ -35,7 +35,13 @@ const SkuCount = ({ getSku, containerClass, eventObservable }) => {
                 <strong className="text-primary h1">{sku}</strong>
             )}
             {!loading && (
-                <Button block outline color="primary" onClick={loadSku}>
+                <Button
+                    block
+                    outline
+                    color="primary"
+                    onClick={loadSku}
+                    disabled={loading}
+                >
                     Reload
                 </Button>
             )}

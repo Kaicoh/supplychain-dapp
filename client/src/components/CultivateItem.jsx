@@ -6,6 +6,7 @@ import {
     FormGroup,
     Label,
     Input,
+    Spinner,
 } from 'reactstrap';
 import Message from './Message';
 
@@ -15,6 +16,7 @@ const CultivateItem = ({ cultivateItem, containerClass }) => {
     const [origin, setOrigin] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const onChangeInput = setFunc => (event) => {
         setFunc(event.target.value);
@@ -23,14 +25,17 @@ const CultivateItem = ({ cultivateItem, containerClass }) => {
     };
 
     const onSubmit = () => {
+        setLoading(true);
         cultivateItem(name, price).send({ from: origin })
             .on('confirmation', () => {
                 setShowSuccess(true);
                 setShowError(false);
+                setLoading(false);
             })
             .on('error', (error) => {
                 setShowSuccess(false);
                 setShowError(true);
+                setLoading(false);
                 console.error(error); // eslint-disable-line no-console
             });
     };
@@ -60,6 +65,7 @@ const CultivateItem = ({ cultivateItem, containerClass }) => {
                         placeholder="input item's name"
                         value={name}
                         onChange={onChangeInput(setName)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <FormGroup>
@@ -71,6 +77,7 @@ const CultivateItem = ({ cultivateItem, containerClass }) => {
                         placeholder="input wholesale price"
                         value={price}
                         onChange={onChangeInput(setPrice)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <hr />
@@ -83,14 +90,16 @@ const CultivateItem = ({ cultivateItem, containerClass }) => {
                         placeholder="input transaction origin"
                         value={origin}
                         onChange={onChangeInput(setOrigin)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <Button
                     color="primary"
                     onClick={onSubmit}
                     block
+                    disabled={loading}
                 >
-                    submit
+                    {loading ? <Spinner color="light" /> : 'submit'}
                 </Button>
             </Form>
         </div>

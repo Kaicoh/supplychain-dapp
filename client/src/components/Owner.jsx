@@ -25,7 +25,13 @@ const Owner = ({ getOwner, containerClass }) => {
                 <p>{owner}</p>
             )}
             {!loading && (
-                <Button outline block color="primary" onClick={loadOwner}>
+                <Button
+                    outline
+                    block
+                    color="primary"
+                    onClick={loadOwner}
+                    disabled={loading}
+                >
                     Reload
                 </Button>
             )}

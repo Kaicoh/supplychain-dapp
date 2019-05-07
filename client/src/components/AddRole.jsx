@@ -7,12 +7,14 @@ import {
     Label,
     Input,
     FormFeedback,
+    Spinner,
 } from 'reactstrap';
 import useValid from '../hooks/useValid';
 
 const AddRole = ({ containerClass, name, addRole }) => {
     const [target, setTarget] = useState('');
     const [origin, setOrigin] = useState('');
+    const [loading, setLoading] = useState(false);
     const [valid, invalid, setValidities, clearValidities] = useValid();
 
     const onChangeText = setFunc => (event) => {
@@ -25,13 +27,16 @@ const AddRole = ({ containerClass, name, addRole }) => {
     const originID = `Adding${capitalizedRole}From`;
 
     const onSubmit = () => {
+        setLoading(true);
         addRole(target).send({ from: origin })
             .on('confirmation', () => {
                 setValidities(true);
+                setLoading(false);
             })
             .on('error', (error) => {
                 console.error(error); // eslint-disable-line no-console
                 setValidities(false);
+                setLoading(false);
             });
     };
 
@@ -50,6 +55,7 @@ const AddRole = ({ containerClass, name, addRole }) => {
                         onChange={onChangeText(setTarget)}
                         valid={valid}
                         invalid={invalid}
+                        disabled={loading}
                     />
                     {valid && <FormFeedback valid>Added successfully!</FormFeedback>}
                     {invalid && <FormFeedback valid>Failed to add...</FormFeedback>}
@@ -63,14 +69,16 @@ const AddRole = ({ containerClass, name, addRole }) => {
                         placeholder="input transaction origin"
                         value={origin}
                         onChange={onChangeText(setOrigin)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <Button
                     color="primary"
                     onClick={onSubmit}
                     block
+                    disabled={loading}
                 >
-                    submit
+                    {loading ? <Spinner color="light" /> : 'submit'}
                 </Button>
             </Form>
         </div>

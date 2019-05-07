@@ -6,6 +6,7 @@ import {
     FormGroup,
     Label,
     Input,
+    Spinner,
 } from 'reactstrap';
 
 const DisabledForm = ({ type, label, value }) => {
@@ -46,8 +47,10 @@ const FetchItem = ({ fetchItem, containerClass }) => {
     const [consumer, setConsumer] = useState('');
     const [wholesalePrice, setWholesalePrice] = useState(0);
     const [retailPrice, setRetailePrice] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = () => {
+        setLoading(true);
         fetchItem(sku).call()
             .then((response) => {
                 setName(response[1]);
@@ -59,8 +62,10 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                 setConsumer(response[7]);
                 setWholesalePrice(response[8].toNumber());
                 setRetailePrice(response[9].toNumber());
+                setLoading(false);
             })
             .catch((error) => {
+                setLoading(false);
                 console.error(error); // eslint-disable-line no-console
             });
     };
@@ -78,6 +83,7 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                         placeholder="input a sku"
                         value={sku}
                         onChange={event => setSku(event.target.value)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <hr />
@@ -95,8 +101,9 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                     onClick={onSubmit}
                     outline
                     block
+                    disabled={loading}
                 >
-                    call
+                    {loading ? <Spinner color="primary" /> : 'call'}
                 </Button>
             </Form>
         </div>

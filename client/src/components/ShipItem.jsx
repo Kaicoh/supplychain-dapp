@@ -6,6 +6,7 @@ import {
     FormGroup,
     Label,
     Input,
+    Spinner,
 } from 'reactstrap';
 import Message from './Message';
 
@@ -14,6 +15,7 @@ const ShipItem = ({ shipItem, containerClass }) => {
     const [origin, setOrigin] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const onChangeInput = setFunc => (event) => {
         setFunc(event.target.value);
@@ -22,14 +24,17 @@ const ShipItem = ({ shipItem, containerClass }) => {
     };
 
     const onSubmit = () => {
+        setLoading(true);
         shipItem(sku).send({ from: origin })
             .on('confirmation', () => {
                 setShowSuccess(true);
                 setShowError(false);
+                setLoading(false);
             })
             .on('error', (error) => {
                 setShowSuccess(false);
                 setShowError(true);
+                setLoading(false);
                 console.error(error); // eslint-disable-line no-console
             });
     };
@@ -59,6 +64,7 @@ const ShipItem = ({ shipItem, containerClass }) => {
                         placeholder="input sku"
                         value={sku}
                         onChange={onChangeInput(setSku)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <hr />
@@ -71,14 +77,16 @@ const ShipItem = ({ shipItem, containerClass }) => {
                         placeholder="input transaction origin"
                         value={origin}
                         onChange={onChangeInput(setOrigin)}
+                        disabled={loading}
                     />
                 </FormGroup>
                 <Button
                     color="primary"
                     onClick={onSubmit}
                     block
+                    disabled={loading}
                 >
-                    submit
+                    {loading ? <Spinner color="light" /> : 'submit'}
                 </Button>
             </Form>
         </div>

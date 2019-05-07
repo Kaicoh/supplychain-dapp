@@ -7,11 +7,13 @@ import {
     Label,
     Input,
     FormFeedback,
+    Spinner,
 } from 'reactstrap';
 import useValid from '../hooks/useValid';
 
 const IsRole = ({ containerClass, name, isRole }) => {
     const [target, setTarget] = useState('');
+    const [loading, setLoading] = useState(false);
     const [valid, invalid, setValidities, clearValidities] = useValid();
 
     const onChangeText = (event) => {
@@ -24,10 +26,15 @@ const IsRole = ({ containerClass, name, isRole }) => {
     const targetID = `${name}ToAsk`;
 
     const onSubmit = () => {
+        setLoading(true);
         isRole(target).call()
-            .then(setValidities)
+            .then((response) => {
+                setValidities(response);
+                setLoading(false);
+            })
             .catch((error) => {
                 setValidities(false);
+                setLoading(false);
                 console.error(error); // eslint-disable-line no-console
             });
     };
@@ -47,6 +54,7 @@ const IsRole = ({ containerClass, name, isRole }) => {
                         onChange={onChangeText}
                         valid={valid}
                         invalid={invalid}
+                        disabled={loading}
                     />
                     {valid && (
                         <FormFeedback valid>
@@ -64,8 +72,9 @@ const IsRole = ({ containerClass, name, isRole }) => {
                     onClick={onSubmit}
                     outline
                     block
+                    disabled={loading}
                 >
-                    call
+                    {loading ? <Spinner color="primary" /> : 'call'}
                 </Button>
             </Form>
         </div>
