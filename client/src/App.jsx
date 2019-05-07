@@ -4,6 +4,7 @@ import useContract from './hooks/useContract';
 import Owner from './components/Owner';
 import { IsRoles, AddRoles } from './components/AccessControl';
 import Items from './components/Items';
+import Transactions from './components/Transactions';
 
 const App = () => {
     const [contract, eventObservable] = useContract();
@@ -28,6 +29,10 @@ const App = () => {
                     <Items
                         containerClass="shadow p-3 mb-3 bg-light rounded"
                         contract={contract}
+                        eventObservable={eventObservable}
+                    />
+                    <Transactions
+                        containerClass="shadow p-3 mb-3 bg-light rounded"
                         eventObservable={eventObservable}
                     />
                 </Fragment>

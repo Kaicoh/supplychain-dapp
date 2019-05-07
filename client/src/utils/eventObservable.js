@@ -6,7 +6,6 @@ class BaseObservable {
         contractEvent()
             .on('data', (event) => {
                 this.subscribers.forEach((subscriber) => {
-                    console.log('event', event);
                     subscriber(event);
                 });
             })
@@ -92,6 +91,15 @@ class EventObservable {
         this.purchasedObservable.subscribe(subscriber);
     }
 
+    subscribeAll(subscriber) {
+        this.subscribeForSale(subscriber);
+        this.subscribeSold(subscriber);
+        this.subscribeShipped(subscriber);
+        this.subscribeReceived(subscriber);
+        this.subscribeBouquet(subscriber);
+        this.subscribePurchases(subscriber);
+    }
+
     unsubscribeForSale(subscriber) {
         this.forSaleObservable.unsubscribe(subscriber);
     }
@@ -114,6 +122,15 @@ class EventObservable {
 
     unsubscribePurchased(subscriber) {
         this.purchasedObservable.unsubscribe(subscriber);
+    }
+
+    unsubscribeAll(subscriber) {
+        this.unsubscribeForSale(subscriber);
+        this.unsubscribeSold(subscriber);
+        this.unsubscribeShipped(subscriber);
+        this.unsubscribeReceived(subscriber);
+        this.unsubscribeBouquet(subscriber);
+        this.unsubscribePurchased(subscriber);
     }
 }
 
