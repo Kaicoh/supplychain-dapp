@@ -1,27 +1,43 @@
 import React from 'react';
-import { Row } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { Row, Col } from 'reactstrap';
 import FetchItem from './FetchItem';
 import ItemTabs from './ItemTabs';
+import SkuCount from './SkuCount';
 import contractProps from '../utils/contractProps';
+import EventObservable from '../utils/eventObservable';
 
-const Items = ({ contract }) => (
-    <div className="shadow p-3 mb-3 bg-light rounded">
-        <h4>Handling Items</h4>
+const Items = ({ contract, containerClass, eventObservable }) => (
+    <div className={containerClass}>
+        <h4>Items</h4>
         <Row>
             <FetchItem
                 fetchItem={contract.methods.fetchItem}
                 containerClass="col-5"
             />
-            <ItemTabs
-                contract={contract}
-                containerClass="col-7"
-            />
+            <Col xs="7">
+                <SkuCount
+                    getSku={contract.methods.sku}
+                    containerClass="mb-5"
+                    eventObservable={eventObservable}
+                />
+                <ItemTabs
+                    contract={contract}
+                />
+            </Col>
         </Row>
     </div>
 );
 
+Items.defaultProps = {
+    containerClass: '',
+    eventObservable: null,
+};
+
 Items.propTypes = {
     contract: contractProps.isRequired,
+    containerClass: PropTypes.string,
+    eventObservable: PropTypes.instanceOf(EventObservable),
 };
 
 export default Items;

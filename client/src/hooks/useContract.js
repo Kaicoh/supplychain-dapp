@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import CoreContract from '../contracts/Core.json';
+import EventObservable from '../utils/eventObservable';
 
 const useContract = () => {
     const [web3, setWeb3] = useState(null);
     const [contract, setContract] = useState(null);
+    const [observable, setObservable] = useState(null);
 
     const reloadWeb3 = () => {
         if (window.ethereum) {
@@ -24,6 +26,13 @@ const useContract = () => {
         }
     };
 
+    const instantiateObservable = () => {
+        if (contract) {
+            const instance = new EventObservable(contract);
+            setObservable(instance);
+        }
+    };
+
     useEffect(reloadWeb3, []);
 
     useEffect(() => {
@@ -39,7 +48,9 @@ const useContract = () => {
         }
     }, [web3]);
 
-    return [contract, reloadWeb3];
+    useEffect(instantiateObservable, [contract]);
+
+    return [contract, observable];
 };
 
 export default useContract;

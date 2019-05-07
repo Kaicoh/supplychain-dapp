@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 const contractProps = PropTypes.shape({
     methods: PropTypes.shape({
         owner: PropTypes.func.isRequired,
+        sku: PropTypes.func.isRequired,
 
         isFarmer: PropTypes.func.isRequired,
         isDistributor: PropTypes.func.isRequired,

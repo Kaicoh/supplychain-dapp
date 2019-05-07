@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Spinner, Button } from 'reactstrap';
-import contractProps from '../utils/contractProps';
 
-const Owner = ({ contract }) => {
+const Owner = ({ getOwner, containerClass }) => {
     const [owner, setOwner] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const getOwner = () => {
+    const loadOwner = () => {
         setLoading(true);
-        contract.methods.owner().call().then((response) => {
+        getOwner().call().then((response) => {
             setOwner(response);
             setLoading(false);
         });
     };
 
-    useEffect(getOwner, []);
+    useEffect(loadOwner, []);
 
     return (
-        <div className="shadow p-3 mb-3 bg-light rounded">
+        <div className={containerClass}>
             <h4>Contract Owner</h4>
             {loading ? (
                 <Spinner color="primary" />
@@ -25,7 +25,7 @@ const Owner = ({ contract }) => {
                 <p>{owner}</p>
             )}
             {!loading && (
-                <Button outline block color="primary" onClick={getOwner}>
+                <Button outline block color="primary" onClick={loadOwner}>
                     Reload
                 </Button>
             )}
@@ -33,8 +33,13 @@ const Owner = ({ contract }) => {
     );
 };
 
+Owner.defaultProps = {
+    containerClass: '',
+};
+
 Owner.propTypes = {
-    contract: contractProps.isRequired,
+    getOwner: PropTypes.func.isRequired,
+    containerClass: PropTypes.string,
 };
 
 export default Owner;

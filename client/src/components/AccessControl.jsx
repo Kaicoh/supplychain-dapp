@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Row } from 'reactstrap';
 import AddRole from './AddRole';
 import IsRole from './IsRole';
 import contractProps from '../utils/contractProps';
 
-export const IsRoles = ({ contract }) => (
-    <div className="shadow p-3 mb-3 bg-light rounded">
+export const IsRoles = ({ contract, containerClass }) => (
+    <div className={containerClass}>
         <h4>Is a Role?</h4>
         <Row>
             <IsRole
@@ -32,12 +33,17 @@ export const IsRoles = ({ contract }) => (
     </div>
 );
 
-IsRoles.propTypes = {
-    contract: contractProps.isRequired,
+IsRoles.defaultProps = {
+    containerClass: '',
 };
 
-export const AddRoles = ({ contract }) => (
-    <div className="shadow p-3 mb-3 bg-light rounded">
+IsRoles.propTypes = {
+    contract: contractProps.isRequired,
+    containerClass: PropTypes.string,
+};
+
+export const AddRoles = ({ contract, containerClass }) => (
+    <div className={containerClass}>
         <h4>Add Role</h4>
         <Row>
             <AddRole
@@ -64,6 +70,11 @@ export const AddRoles = ({ contract }) => (
     </div>
 );
 
+AddRoles.defaultProps = {
+    containerClass: '',
+};
+
 AddRoles.propTypes = {
     contract: contractProps.isRequired,
+    containerClass: PropTypes.string,
 };
