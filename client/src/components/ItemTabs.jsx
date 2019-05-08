@@ -14,6 +14,7 @@ import ShipItem from './ShipItem';
 import ReceiveItem from './ReceiveItem';
 import MakeBouquet from './MakeBouquet';
 import PurchaseItem from './PurchaseItem';
+import UploadFile from './UploadFile';
 import contractProps from '../utils/contractProps';
 
 const ItemTabs = ({ contract, containerClass }) => {
@@ -70,6 +71,14 @@ const ItemTabs = ({ contract, containerClass }) => {
                         purchase
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink
+                        className={classnames({ active: activeTab === 'uploadFile' })}
+                        onClick={() => setActiveTab('uploadFile')}
+                    >
+                        upload
+                    </NavLink>
+                </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
                 <TabPane tabId="cultivateItem">
@@ -89,6 +98,9 @@ const ItemTabs = ({ contract, containerClass }) => {
                 </TabPane>
                 <TabPane tabId="purchaseItem">
                     <PurchaseItem purchaseItem={contract.methods.purchaseItem} />
+                </TabPane>
+                <TabPane tabId="uploadFile">
+                    <UploadFile uploadIPFSHash={contract.methods.upload} />
                 </TabPane>
             </TabContent>
         </div>

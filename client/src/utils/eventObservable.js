@@ -57,6 +57,12 @@ class PurchasedObservable extends BaseObservable {
     }
 }
 
+class UploadedObservable extends BaseObservable {
+    constructor(contract) {
+        super(contract.events.Uploaded);
+    }
+}
+
 class EventObservable {
     constructor(contract) {
         this.forSaleObservable = new ForSaleObservable(contract);
@@ -65,6 +71,7 @@ class EventObservable {
         this.receivedObservable = new ReceivedObservable(contract);
         this.bouquetObservable = new BouquetObservable(contract);
         this.purchasedObservable = new PurchasedObservable(contract);
+        this.uploadedObservable = new UploadedObservable(contract);
     }
 
     subscribeForSale(subscriber) {
@@ -87,8 +94,12 @@ class EventObservable {
         this.bouquetObservable.subscribe(subscriber);
     }
 
-    subscribePurchases(subscriber) {
+    subscribePurchased(subscriber) {
         this.purchasedObservable.subscribe(subscriber);
+    }
+
+    subscribeUploaded(subscriber) {
+        this.uploadedObservable.subscribe(subscriber);
     }
 
     subscribeAll(subscriber) {
@@ -97,7 +108,8 @@ class EventObservable {
         this.subscribeShipped(subscriber);
         this.subscribeReceived(subscriber);
         this.subscribeBouquet(subscriber);
-        this.subscribePurchases(subscriber);
+        this.subscribePurchased(subscriber);
+        this.subscribeUploaded(subscriber);
     }
 
     unsubscribeForSale(subscriber) {
@@ -124,6 +136,10 @@ class EventObservable {
         this.purchasedObservable.unsubscribe(subscriber);
     }
 
+    unsubscribeUploaded(subscriber) {
+        this.uploadedObservable.unsubscribe(subscriber);
+    }
+
     unsubscribeAll(subscriber) {
         this.unsubscribeForSale(subscriber);
         this.unsubscribeSold(subscriber);
@@ -131,6 +147,7 @@ class EventObservable {
         this.unsubscribeReceived(subscriber);
         this.unsubscribeBouquet(subscriber);
         this.unsubscribePurchased(subscriber);
+        this.unsubscribeUploaded(subscriber);
     }
 }
 

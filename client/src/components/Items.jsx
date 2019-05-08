@@ -11,11 +11,12 @@ const Items = ({ contract, containerClass, eventObservable }) => (
     <div className={containerClass}>
         <h4>Items</h4>
         <Row>
-            <FetchItem
-                fetchItem={contract.methods.fetchItem}
-                containerClass="col-5"
-            />
-            <Col xs="7">
+            <Col xs="4">
+                <FetchItem
+                    fetchItem={contract.methods.fetchItem}
+                />
+            </Col>
+            <Col xs="8">
                 <SkuCount
                     getSku={contract.methods.sku}
                     containerClass="mb-5"

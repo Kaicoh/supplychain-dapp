@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
     Button,
+    Row,
+    Col,
     Form,
     FormGroup,
     Label,
@@ -47,6 +49,7 @@ const FetchItem = ({ fetchItem, containerClass }) => {
     const [consumer, setConsumer] = useState('');
     const [wholesalePrice, setWholesalePrice] = useState(0);
     const [retailPrice, setRetailePrice] = useState(0);
+    const [ipfsHash, setIpfsHash] = useState('');
     const [loading, setLoading] = useState(false);
 
     const onSubmit = () => {
@@ -62,6 +65,7 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                 setConsumer(response[7]);
                 setWholesalePrice(response[8].toNumber());
                 setRetailePrice(response[9].toNumber());
+                setIpfsHash(response[10]);
                 setLoading(false);
             })
             .catch((error) => {
@@ -74,19 +78,38 @@ const FetchItem = ({ fetchItem, containerClass }) => {
         <div className={containerClass}>
             <h5>fetch item</h5>
             <Form>
-                <FormGroup>
-                    <Label for="fetchItemSku">Sku</Label>
-                    <Input
-                        type="number"
-                        name="fetchItemSku"
-                        id="fetchItemSku"
-                        placeholder="input a sku"
-                        value={sku}
-                        onChange={event => setSku(event.target.value)}
-                        disabled={loading}
-                    />
-                </FormGroup>
-                <hr />
+                <Row form>
+                    <Col sm={9}>
+                        <FormGroup row>
+                            <Label sm={2} for="fetchItemSku">Sku</Label>
+                            <Col sm={10}>
+                                <Input
+                                    type="number"
+                                    name="fetchItemSku"
+                                    id="fetchItemSku"
+                                    placeholder="input a sku"
+                                    value={sku}
+                                    onChange={event => setSku(event.target.value)}
+                                    disabled={loading}
+                                />
+                            </Col>
+                        </FormGroup>
+                    </Col>
+                    <Col sm={3}>
+                        <Button
+                            color="primary"
+                            onClick={onSubmit}
+                            outline
+                            disabled={loading}
+                            block
+                        >
+                            {loading ? <Spinner color="primary" /> : 'call'}
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
+            <hr />
+            <Form>
                 <DisabledForm type="text" label="name" value={name} />
                 <DisabledForm type="text" label="state" value={itemState} />
                 <DisabledForm type="text" label="owner" value={owner} />
@@ -96,15 +119,15 @@ const FetchItem = ({ fetchItem, containerClass }) => {
                 <DisabledForm type="text" label="consumer" value={consumer} />
                 <DisabledForm type="number" label="wholesalePrice" value={wholesalePrice} />
                 <DisabledForm type="number" label="retailPrice" value={retailPrice} />
-                <Button
-                    color="primary"
-                    onClick={onSubmit}
-                    outline
-                    block
-                    disabled={loading}
-                >
-                    {loading ? <Spinner color="primary" /> : 'call'}
-                </Button>
+                {ipfsHash ? (
+                    <img
+                        src={`https://gateway.ipfs.io/ipfs/${ipfsHash}`}
+                        alt={name}
+                        style={{ width: '100%', marginTop: 10 }}
+                    />
+                ) : (
+                    <p>no image</p>
+                )}
             </Form>
         </div>
     );
