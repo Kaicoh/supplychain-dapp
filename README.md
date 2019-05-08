@@ -30,13 +30,9 @@ Udacity Blockchain ND project 6
 - web3@1.0.0-beta.54
 
 ## UML
+UML.zip includes all the UML diagrams.
 
-- [Activity](UML/ActivityDiagram.drawio)
-- [Sequence](UML/UML/SequenceDiagram.drawio)
-- [State](UML/StateDiagram.drawio)
-- [Class](UML/ClassDiagram.drawio)
-
-## Libraries
+## libraries
 
 | # | library | purpose |
 ----|----|----
