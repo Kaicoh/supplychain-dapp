@@ -1,4 +1,5 @@
 const SupplyChain = artifacts.require('SupplyChain');
+const truffleAssert = require('truffle-assertions');
 
 contract('SupplyChain', (accounts) => {
     let owner;
@@ -44,6 +45,12 @@ contract('SupplyChain', (accounts) => {
             assert.equal(response.itemFarmer, farmer);
             assert.equal(response.itemState, 'For Sale');
             assert.equal(response.itemWholesalePrice, wholesalePrice);
+        });
+
+        it('emits ForSale event', async () => {
+            const tx = await instance.cultivateItem('rose', wholesalePrice, { from: farmer });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'ForSale', event => event.sku.toNumber() === sku.toNumber());
         });
 
         it('reverts when requested by not farmer', async () => {
@@ -108,6 +115,15 @@ contract('SupplyChain', (accounts) => {
             );
         });
 
+        it('emits Sold event', async () => {
+            const tx = await instance.buyItem(sku, {
+                from: distributor,
+                value: wholesalePrice,
+            });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Sold', event => event.sku.toNumber() === sku.toNumber());
+        });
+
         it('reverts when requested by not distributor', async () => {
             try {
                 await instance.buyItem(sku, {
@@ -153,6 +169,12 @@ contract('SupplyChain', (accounts) => {
             assert.equal(response.itemState, 'Shipped');
         });
 
+        it('emits Shipped event', async () => {
+            const tx = await instance.shipItem(sku, { from: farmer });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Shipped', event => event.sku.toNumber() === sku.toNumber());
+        });
+
         it('reverts when requested by not farmer', async () => {
             try {
                 await instance.shipItem(sku, { from: retailer });
@@ -192,6 +214,12 @@ contract('SupplyChain', (accounts) => {
             assert.equal(response.itemState, 'Received');
         });
 
+        it('emits Received event', async () => {
+            const tx = await instance.receiveItem(sku, { from: retailer });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Received', event => event.sku.toNumber() === sku.toNumber());
+        });
+
         it('reverts when requested by not retailer', async () => {
             try {
                 await instance.receiveItem(sku, { from: distributor });
@@ -229,6 +257,12 @@ contract('SupplyChain', (accounts) => {
             const response = await instance.fetchItem.call(sku);
             assert.equal(response.itemState, 'Bouquet');
             assert.equal(response.itemRetailPrice, retailPrice);
+        });
+
+        it('emits Bouquet event', async () => {
+            const tx = await instance.makeBouquet(sku, retailPrice, { from: retailer });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Bouquet', event => event.sku.toNumber() === sku.toNumber());
         });
 
         it('reverts when requested by not retailer', async () => {
@@ -299,6 +333,12 @@ contract('SupplyChain', (accounts) => {
                 Number(balanceAfter),
                 Number(balanceBefore) + Number(retailPrice),
             );
+        });
+
+        it('emits Purchased event', async () => {
+            const tx = await instance.purchaseItem(sku, { from: consumer, value: retailPrice });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Purchased', event => event.sku.toNumber() === sku.toNumber());
         });
 
         it('reverts when requested by not consumer', async () => {
