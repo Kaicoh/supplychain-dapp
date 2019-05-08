@@ -13,10 +13,12 @@
     "lint": "npm run eslint && npm run solium"
   },
   "devDependencies": {
+    "dotenv": "^8.0.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "solium": "^1.2.4",
-    "truffle-assertions": "^0.8.2"
+    "truffle-assertions": "^0.8.2",
+    "truffle-hdwallet-provider": "^1.0.8"
   }
 }
