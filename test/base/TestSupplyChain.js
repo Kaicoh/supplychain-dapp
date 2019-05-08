@@ -362,6 +362,37 @@ contract('SupplyChain', (accounts) => {
         });
     });
 
+    describe('upload', () => {
+        beforeEach(async () => {
+            await instance.cultivateItem('gerbera', wholesalePrice, { from: farmer });
+            sku = await instance.sku.call();
+        });
+
+        it('changes the item states', async () => {
+            await instance.upload(sku, 'ipfs hash value', { from: farmer });
+            const response = await instance.fetchItem.call(sku);
+            assert.equal(response.itemOwner, farmer);
+            assert.equal(response.itemIpfsHash, 'ipfs hash value');
+        });
+
+        it('emits Uploaded event', async () => {
+            const tx = await instance.upload(sku, 'ipfs hash value', { from: farmer });
+            sku = await instance.sku.call();
+            truffleAssert.eventEmitted(tx, 'Uploaded', event => (
+                event.sku.toNumber() === sku.toNumber() && event.ipfsHash === 'ipfs hash value'
+            ));
+        });
+
+        it('reverts when requested by not current owner', async () => {
+            try {
+                await instance.upload(sku, 'ipfs hash value', { from: retailer });
+                throw new Error('unreachable error');
+            } catch (error) {
+                assert(error.message !== 'unreachable error');
+            }
+        });
+    });
+
     describe('fetchItem', () => {
         it('returns item info', async () => {
             await instance.cultivateItem('carnation', wholesalePrice, { from: farmer });
@@ -372,6 +403,7 @@ contract('SupplyChain', (accounts) => {
             await instance.receiveItem(sku, { from: retailer });
             await instance.makeBouquet(sku, retailPrice, { from: retailer });
             await instance.purchaseItem(sku, { from: consumer, value: retailPrice });
+            await instance.upload(sku, 'ipfs hash value', { from: consumer });
 
             const response = await instance.fetchItem.call(sku);
 
@@ -385,6 +417,7 @@ contract('SupplyChain', (accounts) => {
             assert.equal(response.itemConsumer, consumer);
             assert.equal(response.itemWholesalePrice, wholesalePrice);
             assert.equal(response.itemRetailPrice, retailPrice);
+            assert.equal(response.itemIpfsHash, 'ipfs hash value');
         });
     });
 });

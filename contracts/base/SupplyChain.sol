@@ -26,6 +26,7 @@ contract SupplyChain is AccessControl {
         State   itemState;
         uint    wholesalePrice;
         uint    retailPrice;
+        string  ipfsHash;
     }
 
     event ForSale(uint sku);
@@ -34,9 +35,16 @@ contract SupplyChain is AccessControl {
     event Received(uint sku);
     event Bouquet(uint sku);
     event Purchased(uint sku);
+    event Uploaded(uint sku, string ipfsHash);
 
     modifier paidEnough(uint _price) {
         require(msg.value >= _price);
+        _;
+    }
+
+    modifier onlyCurrentOwner(uint _sku) {
+        require(msg.sender != address(0));
+        require(items[_sku].currentOwner == msg.sender);
         _;
     }
 
@@ -93,7 +101,8 @@ contract SupplyChain is AccessControl {
             consumer: address(0),
             itemState: State.ForSale,
             wholesalePrice: _price,
-            retailPrice: 0
+            retailPrice: 0,
+            ipfsHash: ""
         });
         items[sku] = newItem;
 
@@ -169,6 +178,14 @@ contract SupplyChain is AccessControl {
         emit Purchased(_sku);
     }
 
+    function upload(uint _sku, string memory _ipfsHash)
+        public
+        onlyCurrentOwner(_sku)
+    {
+        items[_sku].ipfsHash = _ipfsHash;
+        emit Uploaded(_sku, _ipfsHash);
+    }
+
     function fetchItem(uint _sku)
         public
         view
@@ -182,7 +199,8 @@ contract SupplyChain is AccessControl {
             address itemRetailer,
             address itemConsumer,
             uint    itemWholesalePrice,
-            uint    itemRetailPrice
+            uint    itemRetailPrice,
+            string memory itemIpfsHash
         )
     {
         Item memory item = items[_sku];
@@ -219,6 +237,7 @@ contract SupplyChain is AccessControl {
         itemConsumer = item.consumer;
         itemWholesalePrice = item.wholesalePrice;
         itemRetailPrice = item.retailPrice;
+        itemIpfsHash = item.ipfsHash;
     }
 
     function _make_payable(address x) internal pure returns (address payable) {
